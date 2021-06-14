@@ -14,15 +14,17 @@ req = None
 db = None
 cookie = None
 session = None
-__tstack = []
+__tstack = None
 
 def handler(request):
     global req
     global db
     global cookie
     global session
+    global __tstack
 
     args = {}
+    __tstack = []
 
     # Get request obj
     req = request
