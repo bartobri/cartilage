@@ -113,7 +113,7 @@ def include(__file, args={}):
                         __python_block_indent = len(__line) - len(__line.lstrip())
                     __line = __line[__python_block_indent:]
 
-            # Chop off leading colon is necessary
+            # Chop off leading colon if necessary
             if __line[0] == ':':
                 __line = __line[1:]
 
