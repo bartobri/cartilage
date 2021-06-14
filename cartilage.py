@@ -63,6 +63,7 @@ def include(__file, args={}):
     __html_lines = ""
     __html_lines_indent = 0
     __python_block = 0
+    __python_block_indent = None
     __tloop = 0
 
     # Check for template loop. If not, append to stack.
@@ -91,8 +92,10 @@ def include(__file, args={}):
         # Set/unset python block flags
         if __line[:8] == "<python>":
             __python_block = 1
+            __python_block_indent = None
         elif __line[:9] == "</python>":
             __python_block = 0
+            __python_block_indent = None
 
         # Handle python code
         elif __python_block == 1 or __line[0] == ':':
@@ -102,6 +105,12 @@ def include(__file, args={}):
                 __code += __add_html_lines(__html_lines, __html_lines_indent)
                 __html_lines = ""
                 __html_lines_indent = 0
+
+            # Get or adjust for python block indent
+            if __python_block == 1:
+                if __python_block_indent == None:
+                    __python_block_indent = len(__line) - len(__line.lstrip())
+                __line = __line[__python_block_indent:]
 
             # Chop off leading colon is necessary
             if __line[0] == ':':
