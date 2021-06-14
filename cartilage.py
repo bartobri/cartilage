@@ -159,7 +159,7 @@ def include(__file, args={}):
     sys.stdout = __orig_stdout
     __html_output = __template_output.getvalue()
 
-    # Remove current template from stack ow that it is processed.
+    # Remove current template from stack now that it is processed.
     if __tloop == 0:
         __tstack.pop()
 
