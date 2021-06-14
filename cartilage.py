@@ -5,7 +5,6 @@ from mod_python import apache
 from mod_python import util
 from mod_python import Cookie
 from mod_python import Session
-#from cStringIO import StringIO
 from io import StringIO
 
 # Full API list:
