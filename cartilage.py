@@ -108,9 +108,10 @@ def include(__file, args={}):
 
             # Get or adjust for python block indent
             if __python_block == 1:
-                if __python_block_indent == None:
-                    __python_block_indent = len(__line) - len(__line.lstrip())
-                __line = __line[__python_block_indent:]
+                if len(__line.rstrip()) > 0:
+                    if __python_block_indent == None:
+                        __python_block_indent = len(__line) - len(__line.lstrip())
+                    __line = __line[__python_block_indent:]
 
             # Chop off leading colon is necessary
             if __line[0] == ':':
