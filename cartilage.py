@@ -45,7 +45,7 @@ def handler(request):
 
     # Get db object if db file specified
     opts = req.get_options()
-    if opts.has_key('dbfile') and os.path.isfile(opts['dbfile']):
+    if 'dbfile' in opts and os.path.isfile(opts['dbfile']):
         db = sqlite3.connect(opts['dbfile'])
 
     # Return output
