@@ -61,7 +61,7 @@ def include(__file, args={}):
     __content = []
     __code = ""
     __html_lines = ""
-    __html_lines_indent = 0
+    __current_indent = 0
     __python_block = 0
     __python_block_indent = None
     __tloop = 0
@@ -102,9 +102,9 @@ def include(__file, args={}):
 
             # Add any previous html lines collected at this point
             if __html_lines != "":
-                __code += __add_html_lines(__html_lines, __html_lines_indent)
+                __code += __add_html_lines(__html_lines, __current_indent)
                 __html_lines = ""
-                __html_lines_indent = 0
+                __current_indent = 0
 
             # Get or adjust for python block indent
             if __python_block == 1:
@@ -119,7 +119,9 @@ def include(__file, args={}):
 
             # Set html block indent amount
             if len(__line.rstrip(" \r\n")) > 0 and __line.rstrip(" \r\n")[-1] == ':':
-                __html_lines_indent = len(__line) - len(__line.lstrip()) + 4
+                __current_indent = len(__line) - len(__line.lstrip()) + 4
+            elif len(__line.rstrip(" \r\n")) > 0:
+                __current_indent = len(__line) - len(__line.lstrip())
 
             # Need to wrap include() in a print statement and maintain the indent
             if __line.lstrip()[:8] == "include(":
@@ -136,20 +138,30 @@ def include(__file, args={}):
         elif len(__line.rstrip("\r\n")) == 0:
 
             # Add any previous html lines collected at this point
-            __code += __add_html_lines(__html_lines, __html_lines_indent)
+            __code += __add_html_lines(__html_lines, __current_indent)
             __html_lines = ""
-            __html_lines_indent = 0
+            __current_indent = 0
 
         # Collect html lines to be added later in a single print statement
         else: 
+
+            # Check if we reduced the indent in the HTML and adjust the 
+            # current indent var if necessary
+            if __current_indent > 0 and len(__line) - len(__line.lstrip()) < __current_indent:
+                __code += __add_html_lines(__html_lines, __current_indent)
+                __html_lines = ""
+                while __current_indent > 0 and len(__line) - len(__line.lstrip()) < __current_indent:
+                    __current_indent = __current_indent - 4 if __current_indent - 4 >= 0 else 0
+
+            # Collect line
             __html_lines += __line
 
     # Add any remaining html lines collected at this point
-    __code += __add_html_lines(__html_lines, __html_lines_indent)
+    __code += __add_html_lines(__html_lines, __current_indent)
 
     # Remove vars from scope
     del __html_lines
-    del __html_lines_indent
+    del __current_indent
     del __content
 
     # Execute code and collect output
