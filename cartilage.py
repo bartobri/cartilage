@@ -113,9 +113,12 @@ def include(__file, args={}):
                         __python_block_indent = len(__line) - len(__line.lstrip())
                     __line = __line[__python_block_indent:]
 
-            # Chop off leading colon if necessary
+            # Chop off  or replace leading colon if necessary
             if __line[0] == ':':
-                __line = __line[1:]
+                if (len(__line[1:]) - len(__line[1:].lstrip()) > 0):
+                    __line = __line.replace(':', ' ', 1)
+                else:
+                    __line = __line[1:]
 
             # Set html block indent amount
             if len(__line.rstrip(" \r\n")) > 0 and __line.rstrip(" \r\n")[-1] == ':':
