@@ -175,7 +175,7 @@ def include(__file, args={}):
     __html_output = __template_output.getvalue()
 
     # Remove current template from stack now that it is processed.
-    if __tloop == 0:
+    if __tloop == 0 and len(__tstack) > 0:
         __tstack.pop()
 
     # Uncomment to debug
