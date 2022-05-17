@@ -81,7 +81,7 @@ def include(__file, args={}):
         # Open file or error
         __path = req.document_root() + __file
         try:
-            with open(__path) as __f:
+            with open(__path, encoding='utf8') as __f:
                 __content = __f.readlines()
         except IOError:
             __content.append("<p>File not found: " + __file + "</p>")
